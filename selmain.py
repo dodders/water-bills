@@ -1,4 +1,5 @@
 from selenium import webdriver
+from os import environ
 
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
@@ -12,8 +13,8 @@ user = driver.find_element_by_id('ctl00_BodyPlaceHolder_loginUser_UserName')
 pwd = driver.find_element_by_id('ctl00_BodyPlaceHolder_loginUser_Password')
 login = driver.find_element_by_id('ctl00_BodyPlaceHolder_loginUser_LoginButton')
 
-user.send_keys('user')
-pwd.send_keys('password')
+user.send_keys(environ.get('user'))
+pwd.send_keys(environ.get('pwd'))
 driver.get_screenshot_as_file('loginready.png')
 login.click()
 driver.get_screenshot_as_file('loggedin.png')
