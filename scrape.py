@@ -20,9 +20,9 @@ def scrape_data():
     login = driver.find_element_by_id('ctl00_BodyPlaceHolder_loginUser_LoginButton')
     user.send_keys(environ.get('user'))
     pwd.send_keys(environ.get('pwd'))
-    driver.get_screenshot_as_file('loginready.png')
+    driver.get_screenshot_as_file('data/loginready.png')
     login.click()
-    driver.get_screenshot_as_file('loggedin.png')
+    driver.get_screenshot_as_file('data/loggedin.png')
 
     # reads history
     print('getting reads history...')
