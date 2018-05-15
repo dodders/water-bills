@@ -4,12 +4,20 @@ import format
 
 
 # returns a list of 2 results - consumption and bills (in that order)
+print('scraping...')
 data = scrape.scrape_data()
 
-cons = format.format_reads(data[0])
-for line in cons:
-    print(line)
+print('formatting reads...')
+reads = format.format_reads(data[0])
+print('writing reads...')
+aws.put_text('reads.txt', reads)
 
+print('formatting bills...')
 bills = format.format_bills(data[1])
-for line in bills:
-    print(line)
+print('writing bills...')
+aws.put_text('bills.txt', bills)
+
+params = [reads, bills]
+aws.send(params)
+
+print('done.')

@@ -41,13 +41,13 @@ def scrape_data():
     hist.click()
     # wait for the table to render...
     element = driver.find_element_by_id('ctl00_ContentPlaceHolder1_divSimpleMeter')
-    result.append(element.text)
+    result.append(element.text.split('\n'))
 
     # now get the bills...
     billclick = driver.find_element_by_id('optionSeeMyBill')
     billclick.click()
     bills = driver.find_element_by_id('ctl00_ContentPlaceHolder1_contentBillHist')
-    result.append(bills.text)
+    result.append(bills.text.split('\n'))
 
     # tidy up
     driver.close()
