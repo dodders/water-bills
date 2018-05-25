@@ -1,6 +1,5 @@
 
 FROM ubuntu
-MAINTAINER george.dodwell@gmail.com
 
 RUN apt-get update
 RUN apt-get install -y python3.6
