@@ -10,6 +10,7 @@ def scrape_data():
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1200x600')
+    options.add_argument('--no-sandbox')
     driver = webdriver.Chrome(chrome_options=options)
     driver.implicitly_wait(10)
     driver.get('https://a826-amr.nyc.gov/mydepaccount/')
