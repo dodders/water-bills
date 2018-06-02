@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker run -it --rm  --env-file .env dep bash
+docker run -it --env-file .env dep bash
 
