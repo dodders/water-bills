@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build --rm -t dep .
+docker build -t dep .
