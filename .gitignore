@@ -3,6 +3,7 @@ aws/
 data/*.txt
 data/*.png
 *.png
+logs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
