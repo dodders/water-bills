@@ -6,7 +6,6 @@ from selenium.webdriver.remote.remote_connection import LOGGER
 
 
 def scrape_daily_usage():
-    result = []
     driver = getdriver()
     # reads history
     print('getting water use...')
@@ -17,16 +16,20 @@ def scrape_daily_usage():
     print('found reads history...')
     readshistory.click()
     readstable = driver.find_element_by_id('ctl00_ContentPlaceHolder1_divSimpleMeterDay')
-    result.append(readshistory.text.split('\n'))
+    print('reads table!:' + readstable.text)
+    reads = readstable.text.split('\n')
     driver.close()
     driver.quit()
-    return result
+    return format_daily_usage(reads)
+
+
+def format_daily_usage(usage):
+    return ['daily meter readings!'] + [x.strip() for x in usage[4:-1]]
 
 
 # scrape website data. expects login and passwor in environment variables.
 # returns text for historical water consumption and billing data.
 def scrape_monthly():
-    result = []
     driver = getdriver()
     # reads history
     print('getting reads history...')
@@ -52,7 +55,7 @@ def scrape_monthly():
     billclick = driver.find_element_by_id('optionSeeMyBill')
     billclick.click()
     bills = driver.find_element_by_id('ctl00_ContentPlaceHolder1_contentBillHist')
-    result.append(bills.text.split('\n'))
+    result = bills.text.split('\n')
 
     # tidy up
     driver.close()
