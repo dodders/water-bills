@@ -2,10 +2,9 @@ import scrape
 import aws
 import format
 
-
 # returns a list of 2 results - consumption and bills (in that order)
 print('scraping...')
-data = scrape.scrape_data()
+data = scrape.scrape_monthly()
 
 print('formatting reads...')
 reads = format.format_reads(data[0])
