@@ -59,14 +59,6 @@ resource "aws_ecs_task_definition" "main_task" {
 DEFINITION
 }
 
-
-// ,
-//    "logConfiguration": [
-//      {"name": "awslogs-group", "value": "/ecs/dep-task-tf-definition"},
-//      {"name": "awslogs-region", "value": "${var.region}"},
-//      {"name": "awslogs-stream-prefix", "value": "ecs"}
-//    ]
-
 resource "aws_cloudwatch_event_rule" "dep-daily-tf" {
   name                = "DepDailyTF"
   description         = "run task nightly"
