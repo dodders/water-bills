@@ -4,6 +4,8 @@ data/*.txt
 data/*.png
 *.png
 logs/
+*auto.tfvars
+*.tfstate*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -21,7 +21,7 @@ ENV LANG=C.UTF-8
 WORKDIR /app
 COPY *.py /app/
 COPY Pipfile* /app/
-COPY *.sh /app/
+COPY scripts/*.sh /app/
 
 RUN /root/.local/bin/pipenv install
 CMD ["/bin/sh", "-c", "/root/.local/bin/pipenv run python3 main.py 2>&1"]

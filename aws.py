@@ -1,4 +1,5 @@
 import boto3
+import botocore.response as br
 
 # initialize aws connection.
 # credentials are loaded from environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
@@ -18,6 +19,14 @@ def put_text(key, data):
     bdata = bytes(data, 'utf-8')
     s3.Bucket('dep-history').put_object(Key=key, Body=bdata)
     print('written to s3: ' + key)
+
+
+# get config data from s3
+def get_config():
+    # s3.Bucket('dep-config').download_file('aws.config', '')
+    object = s3.Object('dep-config', 'aws.config').get()
+    body_data = object['Body'].read().decode('utf-8')
+    return body_data
 
 
 # addresses is a list of email addresses.
