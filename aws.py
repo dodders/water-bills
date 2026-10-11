@@ -1,6 +1,10 @@
 import os
+import smtplib
+from email.message import EmailMessage
 
-# set LOCAL=1 (e.g. in .env) to skip AWS: files are written to ./data and notifications are printed.
+# set LOCAL=1 (e.g. in .env) to skip AWS: files are written to ./data and notifications are printed,
+# or emailed over SMTP if SMTP_HOST is set (also needs SMTP_USER, SMTP_PASSWORD, MAIL_FROM, MAIL_TO;
+# SMTP_PORT defaults to 587/STARTTLS; MAIL_TO may be comma-separated).
 LOCAL = os.environ.get('LOCAL', '').lower() in ('1', 'true', 'yes')
 
 # initialize aws connection.
@@ -10,6 +14,23 @@ if not LOCAL:
     import boto3
     s3 = boto3.resource('s3')
     sns = boto3.client('sns')
+
+
+def local_notify(subject, body):
+    host = os.environ.get('SMTP_HOST')
+    if not host:
+        print('--- email (not sent) ---\n' + body)
+        return
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = os.environ['MAIL_FROM']
+    msg['To'] = os.environ['MAIL_TO']
+    msg.set_content(body)
+    with smtplib.SMTP(host, int(os.environ.get('SMTP_PORT', '587'))) as smtp:
+        smtp.starttls()
+        smtp.login(os.environ['SMTP_USER'], os.environ['SMTP_PASSWORD'])
+        smtp.send_message(msg)
+    print('email sent via smtp to', msg['To'])
 
 
 # write text data to the S3 bucket. this function handles conversion to binary.
@@ -45,7 +66,7 @@ def get_config():
 def send(items):
     data = '\n'.join(['Meter Reads', items[0], '', '', 'Bill History', items[1]])
     if LOCAL:
-        print('--- email (not sent) ---\n' + data)
+        local_notify('DEP Bill Extract', data)
         return
     resp = sns.publish(
         TopicArn='arn:aws:sns:us-east-1:397678393215:dep-notifications',
@@ -58,7 +79,7 @@ def send(items):
 def send_daily(msg):
     print('sending daily:' + ' '.join(msg))
     if LOCAL:
-        print('--- email (not sent) ---\n' + '\n'.join(msg))
+        local_notify('DEP Bill Extract', '\n'.join(msg))
         return
     resp = sns.publish(
         TopicArn='arn:aws:sns:us-east-1:397678393215:dep-notifications',
