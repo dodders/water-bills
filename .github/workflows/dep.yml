@@ -19,7 +19,6 @@ jobs:
       # ubuntu-latest ships Chrome; selenium-manager fetches the matching driver.
       - run: python main.py
         env:
-          LOCAL: '1'
           user: ${{ secrets.DEP_USER }}
           pwd: ${{ secrets.DEP_PWD }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}

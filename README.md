@@ -29,7 +29,6 @@ Create a gitignored `.env`:
 ```
 user=<DEP login>
 pwd=<DEP password>
-LOCAL=1
 ```
 
 then `.venv/bin/python main.py`. Without the `SMTP_*` / `MAIL_*` variables the email is printed instead of sent. Requires Chrome; Selenium fetches the driver.
