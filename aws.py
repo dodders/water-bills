@@ -1,11 +1,15 @@
-import boto3
-import botocore.response as br
+import os
+
+# set LOCAL=1 (e.g. in .env) to skip AWS: files are written to ./data and notifications are printed.
+LOCAL = os.environ.get('LOCAL', '').lower() in ('1', 'true', 'yes')
 
 # initialize aws connection.
 # credentials are loaded from environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-print('aws dal starting...')
-s3 = boto3.resource('s3')
-sns = boto3.client('sns')
+print('aws dal starting... (local mode)' if LOCAL else 'aws dal starting...')
+if not LOCAL:
+    import boto3
+    s3 = boto3.resource('s3')
+    sns = boto3.client('sns')
 
 
 # write text data to the S3 bucket. this function handles conversion to binary.
@@ -16,6 +20,12 @@ def put_list(key, data):
 
 
 def put_text(key, data):
+    if LOCAL:
+        os.makedirs('data', exist_ok=True)
+        with open(os.path.join('data', key), 'w') as f:
+            f.write(data)
+        print('written locally: data/' + key)
+        return
     bdata = bytes(data, 'utf-8')
     s3.Bucket('dep-history').put_object(Key=key, Body=bdata)
     print('written to s3: ' + key)
@@ -34,6 +44,9 @@ def get_config():
 # each item is a newline-delimited text field.
 def send(items):
     data = '\n'.join(['Meter Reads', items[0], '', '', 'Bill History', items[1]])
+    if LOCAL:
+        print('--- email (not sent) ---\n' + data)
+        return
     resp = sns.publish(
         TopicArn='arn:aws:sns:us-east-1:397678393215:dep-notifications',
         Subject='DEP Bill Extract',
@@ -44,6 +57,9 @@ def send(items):
 
 def send_daily(msg):
     print('sending daily:' + ' '.join(msg))
+    if LOCAL:
+        print('--- email (not sent) ---\n' + '\n'.join(msg))
+        return
     resp = sns.publish(
         TopicArn='arn:aws:sns:us-east-1:397678393215:dep-notifications',
         Subject='DEP Bill Extract',
