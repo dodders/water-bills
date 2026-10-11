@@ -25,4 +25,4 @@ Flat module layout at the repo root; `main.py` orchestrates:
 
 - The new site has no separate monthly meter-reads history, so `monthly()`'s "reads" are billed HCF per bill period from the same Billing export as the amounts.
 - Scraping depends on element IDs (`NavMenu_*`, the B2C login IDs) and the export button text. If the site changes again, check those first. The old host `a826-amr.nyc.gov` no longer exists.
-- `terraform/` is the abandoned AWS (ECS Fargate) setup, kept only so deployed resources can be destroyed. It is not part of the current hosting.
+- The old AWS hosting (ECS/Batch container, S3 history, SNS emails) has been torn down. `aws.py` still contains the S3/SNS code path for when `LOCAL` is unset, but it is unused and nothing in AWS backs it any more.

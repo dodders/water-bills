@@ -35,7 +35,3 @@ LOCAL=1
 then `.venv/bin/python main.py`. Without the `SMTP_*` / `MAIL_*` variables the email is printed instead of sent. Requires Chrome; Selenium fetches the driver.
 
 Tests: `.venv/bin/python -m unittest discover -s test -p "test_*.py"` (`testscrape.py` logs in to the live site and needs `.env`).
-
-## Legacy
-
-`terraform/` is the old AWS setup (ECS Fargate task on a CloudWatch schedule). It is no longer used; destroy any deployed resources so they don't send duplicate emails.
