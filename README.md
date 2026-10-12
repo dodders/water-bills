@@ -34,3 +34,12 @@ pwd=<DEP password>
 then `.venv/bin/python main.py`. Without the `SMTP_*` / `MAIL_*` variables the email is printed instead of sent. Requires Chrome; Selenium fetches the driver.
 
 Tests: `.venv/bin/python -m unittest discover -s test -p "test_*.py"` (`testscrape.py` logs in to the live site and needs `.env`).
+
+## Infrastructure history
+
+Until October 2026 this ran as a container on AWS (us-east-1): an EventBridge rule (`dep-daily`) launched an ECS Fargate task from an ECR image, history files were kept in the S3 bucket `dep-history` (versioned), config in `dep-config`, and results were emailed through the SNS topic `dep-notifications`. A Batch queue, compute environment and job definitions (`dep`) existed as an earlier hosting attempt. An unapplied Terraform version of the ECS setup was also in this repo.
+
+All of it was removed on 2026-10-11/12, along with the IAM users `dep` and `dep-admin` (and their access keys) and the group `dep-group`. Nothing in AWS is used any more. The S3 history (3 files and 1,121 old versions, 2018–2021) and the config file were downloaded first and kept outside the repo. The IAM user `iam-admin` (the old Terraform profile, full admin) was deliberately left in place.
+
+The portal itself changed in March 2024: the old `a826-amr.nyc.gov` site was replaced by `a826-umax.dep.nyc.gov`, which is what broke the original scraper.
+

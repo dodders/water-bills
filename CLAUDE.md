@@ -25,4 +25,4 @@ Flat module layout at the repo root; `main.py` orchestrates:
 
 - The new site has no separate monthly meter-reads history, so `monthly()`'s "reads" are billed HCF per bill period from the same Billing export as the amounts.
 - Scraping depends on element IDs (`NavMenu_*`, the B2C login IDs) and the export button text. If the site changes again, check those first. The old host `a826-amr.nyc.gov` no longer exists.
-- The old AWS hosting (ECS/Batch container, S3 history, SNS emails) has been torn down; nothing here uses AWS any more.
+- The old AWS hosting (ECS/Batch container, S3 history, SNS emails, the `dep` IAM users) was torn down in October 2026; nothing here uses AWS any more, so there are no AWS credentials or boto3 to set up. See the README's "Infrastructure history" section for what existed.
